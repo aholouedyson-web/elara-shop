@@ -1,0 +1,228 @@
+{
+  "nav": {
+    "shop": "Tienda",
+    "cart": "Carrito",
+    "account": "Mi cuenta",
+    "search": "Buscar productos...",
+    "menu": "Menú",
+    "close": "Cerrar"
+  },
+  "home": {
+    "hero": {
+      "title": "Tecnología que",
+      "titleHighlight": "transforma tu vida",
+      "subtitle": "Descubre la selección de electrónica premium de Élara Shop. Envíos a toda Europa y al mundo.",
+      "cta": "Explorar la tienda",
+      "secondaryCta": "Ver novedades"
+    },
+    "categories": {
+      "title": "Nuestras categorías",
+      "subtitle": "Encuentra exactamente lo que buscas"
+    },
+    "featured": {
+      "title": "Productos destacados",
+      "subtitle": "Los más valorados por nuestros clientes"
+    },
+    "newArrivals": {
+      "title": "Novedades",
+      "subtitle": "Los últimos productos disponibles"
+    },
+    "promotions": {
+      "title": "Ofertas especiales",
+      "subtitle": "Aprovecha nuestras mejores promociones",
+      "badge": "Oferta"
+    },
+    "newsletter": {
+      "title": "¿No te quieres perder nada?",
+      "subtitle": "Suscríbete a nuestra newsletter y recibe las mejores ofertas directamente en tu correo.",
+      "placeholder": "Tu dirección de email",
+      "cta": "Suscribirme",
+      "success": "¡Gracias! Te has suscrito correctamente.",
+      "privacy": "Respetamos tu privacidad. Sin spam, nunca."
+    },
+    "about": {
+      "title": "Nuestra historia",
+      "text": "Élara Shop nació con una misión simple: hacer que la tecnología premium sea accesible para todos, desde España al mundo entero. Cuidamos cada detalle, desde la selección de productos hasta el embalaje, para que tu experiencia sea perfecta.",
+      "stats": {
+        "products": "Productos",
+        "countries": "Países",
+        "customers": "Clientes satisfechos",
+        "years": "Años de experiencia"
+      }
+    }
+  },
+  "shop": {
+    "title": "Nuestra tienda",
+    "filters": "Filtros",
+    "sortBy": "Ordenar por",
+    "sortOptions": {
+      "newest": "Más recientes",
+      "popular": "Más populares",
+      "priceAsc": "Precio: menor a mayor",
+      "priceDesc": "Precio: mayor a menor"
+    },
+    "category": "Categoría",
+    "allCategories": "Todas las categorías",
+    "priceRange": "Rango de precio",
+    "noResults": "No se encontraron productos",
+    "showing": "Mostrando {count} productos",
+    "loadMore": "Cargar más"
+  },
+  "product": {
+    "addToCart": "Añadir al carrito",
+    "addedToCart": "Añadido al carrito",
+    "outOfStock": "Sin stock",
+    "inStock": "En stock",
+    "lowStock": "Pocas unidades",
+    "quantity": "Cantidad",
+    "variants": "Opciones",
+    "description": "Descripción",
+    "specifications": "Especificaciones",
+    "shipping": "Envío",
+    "similarProducts": "Productos similares",
+    "selectVariant": "Selecciona una opción",
+    "discount": "{percent}% de descuento"
+  },
+  "cart": {
+    "title": "Mi carrito",
+    "empty": "Tu carrito está vacío",
+    "emptyDescription": "Añade algunos productos para comenzar",
+    "continueShopping": "Continuar comprando",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "discount": "Descuento",
+    "total": "Total",
+    "checkout": "Proceder al pago",
+    "remove": "Eliminar",
+    "couponCode": "Código de descuento",
+    "applyCoupon": "Aplicar",
+    "removeCoupon": "Eliminar cupón",
+    "couponApplied": "Cupón aplicado",
+    "invalidCoupon": "Cupón inválido",
+    "freeShipping": "Envío gratuito",
+    "estimatedShipping": "Envío estimado",
+    "calculateShipping": "Calcular envío"
+  },
+  "checkout": {
+    "title": "Finalizar pedido",
+    "steps": {
+      "information": "Información",
+      "shipping": "Envío",
+      "payment": "Pago"
+    },
+    "information": {
+      "title": "Información de contacto",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "email": "Email",
+      "phone": "Teléfono",
+      "company": "Empresa (opcional)"
+    },
+    "address": {
+      "title": "Dirección de envío",
+      "line1": "Dirección",
+      "line2": "Apartamento, suite (opcional)",
+      "city": "Ciudad",
+      "state": "Provincia / Estado",
+      "postalCode": "Código postal",
+      "country": "País",
+      "selectCountry": "Selecciona tu país"
+    },
+    "shipping": {
+      "title": "Método de envío",
+      "estimated": "Entrega estimada"
+    },
+    "payment": {
+      "title": "Pago seguro",
+      "stripe": "Tarjeta de crédito / débito",
+      "paypal": "PayPal",
+      "secureNotice": "Tu pago está protegido con encriptación SSL de 256 bits.",
+      "testMode": "⚠️ MODO TEST: Usa la tarjeta 4242 4242 4242 4242 para probar."
+    },
+    "orderSummary": "Resumen del pedido",
+    "placeOrder": "Confirmar pedido",
+    "processing": "Procesando..."
+  },
+  "orders": {
+    "title": "Mis pedidos",
+    "empty": "No tienes pedidos todavía",
+    "orderNumber": "Pedido #{number}",
+    "status": {
+      "PENDING": "Pendiente",
+      "PAID": "Pagado",
+      "PROCESSING": "En preparación",
+      "SHIPPED": "Enviado",
+      "DELIVERED": "Entregado",
+      "CANCELLED": "Cancelado",
+      "REFUNDED": "Reembolsado"
+    },
+    "trackOrder": "Seguir pedido",
+    "trackingNumber": "Número de seguimiento"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Bienvenido de nuevo a Élara Shop",
+      "email": "Email",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "register": "Crear cuenta",
+      "forgotPassword": "¿Olvidaste tu contraseña?"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "subtitle": "Únete a miles de clientes satisfechos",
+      "name": "Nombre completo",
+      "email": "Email",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submit": "Crear cuenta",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "login": "Iniciar sesión"
+    }
+  },
+  "footer": {
+    "tagline": "Tecnología premium para todos",
+    "shop": "Tienda",
+    "help": "Ayuda",
+    "legal": "Legal",
+    "links": {
+      "about": "Sobre nosotros",
+      "contact": "Contacto",
+      "faq": "FAQ",
+      "shipping": "Política de envíos",
+      "returns": "Devoluciones",
+      "privacy": "Privacidad",
+      "terms": "Términos y condiciones"
+    },
+    "payment": "Métodos de pago aceptados",
+    "copyright": "© {year} Élara Shop. Todos los derechos reservados.",
+    "madeWith": "Hecho con ❤️ desde España"
+  },
+  "common": {
+    "addToCart": "Añadir al carrito",
+    "viewAll": "Ver todos",
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "retry": "Intentar de nuevo",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "clear": "Limpiar",
+    "apply": "Aplicar",
+    "close": "Cerrar",
+    "seeDetails": "Ver detalles",
+    "from": "Desde",
+    "free": "Gratis",
+    "new": "Nuevo",
+    "sale": "Oferta"
+  }
+}
