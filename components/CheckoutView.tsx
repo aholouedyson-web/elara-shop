@@ -12,6 +12,11 @@ import {
   AlertCircle,
   ArrowRight,
   Package,
+  Camera,
+  Upload,
+  X,
+  Send,
+  ExternalLink,
 } from 'lucide-react'
 import { useCartStore } from '@/store/cart'
 import { formatPrice, COUNTRIES, generateOrderNumber } from '@/lib/utils'
@@ -37,6 +42,11 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderComplete, setOrderComplete] = useState<any | null>(null)
   const [mounted, setMounted] = useState(false)
+
+  // Payment proof image states
+  const [paymentProofUrl, setPaymentProofUrl] = useState<string | null>(null)
+  const [uploadingProof, setUploadingProof] = useState(false)
+  const [proofError, setProofError] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -81,41 +91,128 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
 
   const localeFormat = locale === 'fr' ? 'fr-FR' : locale === 'en' ? 'en-US' : 'es-ES'
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  // Upload payment proof image to Supabase Storage via Server API
+  const handleProofUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingProof(true)
+    setProofError(null)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await res.json()
+      if (data.publicUrl) {
+        setPaymentProofUrl(data.publicUrl)
+      } else {
+        setProofError(data.error || "Erreur lors de l'envoi de la photo de preuve.")
+      }
+    } catch (err: any) {
+      setProofError(err.message || "Erreur de connexion lors de l'upload.")
+    } finally {
+      setUploadingProof(false)
+    }
+  }
+
+  // Redirect to Gmail with pre-filled order details & payment proof
+  const openGmailConfirmation = (orderData: any) => {
+    const recipient = 'elara.boutique.es@gmail.com'
+    const subject = encodeURIComponent(`Confirmation Commande #${orderData.orderNumber} - ${orderData.customerName}`)
+    const bodyContent = `Bonjour,\n\nJe confirme le règlement de ma commande effectuée sur Élara Shop.\n\n` +
+      `--------------------------------------\n` +
+      `DÉTAILS DE LA COMMANDE :\n` +
+      `Numéro de commande : ${orderData.orderNumber}\n` +
+      `Date : ${orderData.date}\n` +
+      `Client : ${orderData.customerName}\n` +
+      `Email : ${orderData.email}\n` +
+      `Adresse de livraison : ${orderData.address}\n` +
+      `Montant total : ${orderData.total} €\n` +
+      `Mode de paiement : ${orderData.paymentMethod}\n` +
+      (orderData.paymentProofUrl ? `Preuve de paiement (Lien sécurisé) : ${orderData.paymentProofUrl}\n` : '') +
+      `--------------------------------------\n\n` +
+      `Articles commandés :\n` +
+      orderData.items.map((i: any) => `- ${i.name} x${i.quantity} (${i.price} €)`).join('\n') +
+      `\n\nMerci de bien vouloir valider la préparation et l'expédition de mon colis.\n\nCordialement,\n${orderData.customerName}`
+
+    const encodedBody = encodeURIComponent(bodyContent)
+    
+    // Web Gmail direct link (desktop & mobile browser)
+    const webGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${encodedBody}`
+    
+    // Mailto fallback
+    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${encodedBody}`
+
+    // Open Gmail directly in a new tab
+    if (typeof window !== 'undefined') {
+      const opened = window.open(webGmailUrl, '_blank')
+      if (!opened) {
+        window.location.href = mailtoUrl
+      }
+    }
+  }
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!paymentProofUrl) {
+      setProofError("Veuillez insérer la photo de votre preuve de paiement avant de valider.")
+      alert("Veuillez insérer la photo de votre preuve de paiement avant de confirmer votre commande.")
+      return
+    }
+
     setIsProcessing(true)
 
-    // Simulate safe API creation and payment authorization
+    const newOrderNumber = generateOrderNumber()
+    const orderData = {
+      orderNumber: newOrderNumber,
+      date: new Date().toLocaleDateString(localeFormat),
+      email,
+      customerName: `${firstName} ${lastName}`,
+      address: `${address}, ${postalCode} ${city}, ${country}`,
+      country,
+      items: [...items],
+      subtotal,
+      discount,
+      shippingFee,
+      total,
+      paymentMethod: paymentMethod === 'stripe' ? 'Carte bancaire' : 'PayPal',
+      shippingMethod: shippingInfo.name,
+      paymentProofUrl,
+    }
+
+    try {
+      // 1. Save to Supabase backend
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      })
+    } catch (err) {
+      console.error('Failed to save order to API:', err)
+    }
+
+    // 2. Save to localStorage for instant tracking
+    if (typeof window !== 'undefined') {
+      const storedOrders = JSON.parse(localStorage.getItem('elara_orders') || '[]')
+      storedOrders.unshift(orderData)
+      localStorage.setItem('elara_orders', JSON.stringify(storedOrders))
+    }
+
+    setOrderComplete(orderData)
+    clearCart()
+    setIsProcessing(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    // 3. Automatically redirect user to Gmail
     setTimeout(() => {
-      const newOrderNumber = generateOrderNumber()
-      const orderData = {
-        orderNumber: newOrderNumber,
-        date: new Date().toLocaleDateString(localeFormat),
-        email,
-        customerName: `${firstName} ${lastName}`,
-        address: `${address}, ${postalCode} ${city}, ${country}`,
-        country,
-        items: [...items],
-        subtotal,
-        discount,
-        shippingFee,
-        total,
-        paymentMethod: paymentMethod === 'stripe' ? 'Carte bancaire' : 'PayPal',
-        shippingMethod: shippingInfo.name,
-      }
-
-      // Save to localStorage for instant tracking
-      if (typeof window !== 'undefined') {
-        const storedOrders = JSON.parse(localStorage.getItem('elara_orders') || '[]')
-        storedOrders.unshift(orderData)
-        localStorage.setItem('elara_orders', JSON.stringify(storedOrders))
-      }
-
-      setOrderComplete(orderData)
-      clearCart()
-      setIsProcessing(false)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 1800)
+      openGmailConfirmation(orderData)
+    }, 1200)
   }
 
   const t = {
@@ -248,6 +345,43 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
               {formatPrice(orderComplete.total, 'EUR', localeFormat)}
             </span>
           </div>
+
+          {orderComplete.paymentProofUrl && (
+            <div className="pt-3 border-t border-neutral-200">
+              <span className="text-xs font-semibold text-neutral-700 block mb-2">Preuve de paiement transmise :</span>
+              <a
+                href={orderComplete.paymentProofUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-teal-700 font-semibold hover:underline"
+              >
+                <ExternalLink size={13} />
+                <span>Voir le reçu hébergé sur Supabase</span>
+              </a>
+            </div>
+          )}
+        </div>
+
+        {/* Gmail Redirection Prompt */}
+        <div className="p-5 rounded-2xl bg-red-50 border border-red-200 text-left mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center flex-shrink-0 font-bold">
+              <Send size={18} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-red-900">Confirmation automatique par Gmail</h4>
+              <p className="text-xs text-red-700">Votre client Gmail s'ouvre avec le message pré-rempli à destination de notre service client.</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => openGmailConfirmation(orderComplete)}
+            className="btn bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 whitespace-nowrap cursor-pointer shadow-sm"
+          >
+            <Send size={14} />
+            <span>Ouvrir Gmail maintenant</span>
+          </button>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -545,6 +679,69 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
                   </p>
                 </div>
               )}
+
+              {/* Step 4: Preuve de Paiement */}
+              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/90 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-amber-900 flex items-center gap-2">
+                    <Camera size={16} className="text-amber-700" />
+                    <span>Preuve de paiement (Capture / Reçu de virement ou carte) *</span>
+                  </label>
+                  {paymentProofUrl && (
+                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                      <CheckCircle2 size={12} />
+                      Photo insérée
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-[11px] text-amber-800 leading-relaxed">
+                  Après avoir entré vos coordonnées bancaires, veuillez joindre une capture d'écran ou photo de la confirmation de transaction pour valider votre commande.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="cursor-pointer py-2.5 px-4 rounded-xl border border-dashed border-amber-600 bg-white hover:bg-amber-100/50 text-amber-900 text-xs font-semibold flex items-center gap-2 transition-colors shadow-2xs">
+                    <Upload size={14} className="text-amber-700" />
+                    <span>{uploadingProof ? 'Téléchargement de la photo...' : paymentProofUrl ? 'Changer la photo' : 'Insérer la photo du paiement'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProofUpload}
+                      disabled={uploadingProof}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {paymentProofUrl && (
+                    <button
+                      type="button"
+                      onClick={() => setPaymentProofUrl(null)}
+                      className="text-xs text-red-600 hover:underline flex items-center gap-1"
+                    >
+                      <X size={12} />
+                      <span>Supprimer</span>
+                    </button>
+                  )}
+                </div>
+
+                {proofError && (
+                  <p className="text-[11px] font-medium text-red-600 flex items-center gap-1">
+                    <AlertCircle size={13} />
+                    <span>{proofError}</span>
+                  </p>
+                )}
+
+                {/* Preview Thumbnail */}
+                {paymentProofUrl && (
+                  <div className="relative w-28 h-28 rounded-xl overflow-hidden border-2 border-emerald-500 shadow-sm mt-2">
+                    <img
+                      src={paymentProofUrl}
+                      alt="Preuve de paiement"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
 
               <div className="flex items-center gap-2 text-xs text-neutral-500 pt-1">
                 <Lock size={13} className="text-emerald-600" />

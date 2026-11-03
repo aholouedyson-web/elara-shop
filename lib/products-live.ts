@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { Product, PRODUCTS } from '@/lib/products-data'
 
 function mapDbProductToAppProduct(dbP: any): Product {
@@ -66,7 +66,7 @@ export async function fetchLiveProducts(options?: {
   sort?: string
 }): Promise<Product[]> {
   try {
-    const { data: dbProducts, error } = await supabase
+    const { data: dbProducts, error } = await supabaseAdmin
       .from('products')
       .select('*, product_images(*), categories(slug)')
       .order('created_at', { ascending: false })
@@ -89,7 +89,7 @@ export async function fetchLiveProducts(options?: {
  */
 export async function fetchLiveProductBySlug(slug: string): Promise<Product | undefined> {
   try {
-    const { data: dbProduct, error } = await supabase
+    const { data: dbProduct, error } = await supabaseAdmin
       .from('products')
       .select('*, product_images(*), categories(slug)')
       .eq('slug', slug)

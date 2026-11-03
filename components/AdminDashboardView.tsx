@@ -208,7 +208,7 @@ export default function AdminDashboardView({ locale = 'es' }: { locale: string }
       const stored = JSON.parse(localStorage.getItem('elara_orders') || '[]')
       if (stored.length > 0) {
         const formatted = stored.map((o: any, idx: number) => ({
-          id: `ord-local-${idx}`,
+          id: o.orderNumber ? `ord-${o.orderNumber}` : `ord-local-${idx}-${Date.now()}`,
           orderNumber: o.orderNumber,
           date: o.date,
           customer: o.customerName || 'Client Commande',
@@ -220,7 +220,12 @@ export default function AdminDashboardView({ locale = 'es' }: { locale: string }
           carrier: 'Correos Express',
           trackingNumber: o.trackingNumber || '',
         }))
-        setOrders((prev) => [...formatted, ...prev])
+        setOrders((prev) => {
+          // Avoid duplicate orders by orderNumber/id
+          const existingIds = new Set(prev.map((item) => item.orderNumber || item.id))
+          const newOrders = formatted.filter((item: any) => !existingIds.has(item.orderNumber || item.id))
+          return [...newOrders, ...prev]
+        })
       }
     }
   }, [])
@@ -651,8 +656,8 @@ export default function AdminDashboardView({ locale = 'es' }: { locale: string }
                   </button>
                 </div>
                 <div className="divide-y divide-neutral-800">
-                  {orders.slice(0, 4).map((o) => (
-                    <div key={o.id} className="py-3 flex items-center justify-between text-xs">
+                  {orders.slice(0, 4).map((o, idx) => (
+                    <div key={`${o.id || o.orderNumber}-${idx}`} className="py-3 flex items-center justify-between text-xs">
                       <div>
                         <span className="font-mono font-bold text-white block">{o.orderNumber}</span>
                         <span className="text-neutral-400">{o.customer} · {o.country}</span>
@@ -845,8 +850,8 @@ export default function AdminDashboardView({ locale = 'es' }: { locale: string }
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-800/60">
-                  {orders.map((o) => (
-                    <tr key={o.id} className="hover:bg-neutral-800/50 transition-colors">
+                  {orders.map((o, idx) => (
+                    <tr key={`${o.id || o.orderNumber}-${idx}`} className="hover:bg-neutral-800/50 transition-colors">
                       <td className="py-3 px-4 font-mono font-bold text-white">
                         {o.orderNumber}
                       </td>
