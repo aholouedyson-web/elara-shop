@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Élara Shop | Boutique Électronique Premium Internationale',
-  description: 'Boutique e-commerce haut de gamme basée en Espagne. Smartphones, ordinateurs, audio et accessoires expédiés dans le monde entier.',
-  keywords: ['e-commerce', 'électronique', 'smartphones', 'laptops', 'audio', 'espagne', 'international'],
+  title: 'ÉlaraShop | Boutique Électronique Premium',
+  description: 'ÉlaraShop - Votre boutique high-tech : smartphones, ordinateurs, audio et accessoires expédiés dans le monde entier.',
+  keywords: ['e-commerce', 'électronique', 'smartphones', 'laptops', 'audio', 'ÉlaraShop'],
 }
 
 export default function RootLayout({

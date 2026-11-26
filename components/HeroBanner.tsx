@@ -2,145 +2,147 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, ShieldCheck, Truck, Sparkles, Award } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight, Truck, ShieldCheck, Headphones } from 'lucide-react'
+import { useState } from 'react'
 
-export default function HeroBanner({ locale = 'es' }: { locale?: string }) {
-  const content = {
-    es: {
-      badge: 'Boutique Électronique Premium en Espagne',
-      title1: 'Tecnología de élite para',
-      title2: 'transformar tu vida.',
-      desc: 'Seleccionamos los mejores smartphones, portátiles y accesorios del mundo. Envío prioritario desde España a toda Europa e internacional con seguimiento.',
-      primaryBtn: 'Explorar la Tienda',
-      secondaryBtn: 'Ofertas y Novedades',
-      trustBadges: [
-        { icon: Truck, label: 'Envíos rápidos desde España' },
-        { icon: ShieldCheck, label: 'Garantía europea 2 años' },
-        { icon: Award, label: 'Productos 100% auténticos' },
-      ],
-    },
-    fr: {
-      badge: 'Boutique Électronique Premium en Espagne',
-      title1: 'La technologie d\'élite pour',
-      title2: 'sublimer votre quotidien.',
-      desc: 'Une sélection minutieuse de smartphones haute précision, ultrabooks et accessoires d\'exception. Expéditions prioritaires et sécurisées vers la France, l\'Europe et le monde.',
-      primaryBtn: 'Découvrir la Boutique',
-      secondaryBtn: 'Nouveautés & Promotions',
-      trustBadges: [
-        { icon: Truck, label: 'Expédition directe d\'Espagne' },
-        { icon: ShieldCheck, label: 'Garantie européenne 2 ans' },
-        { icon: Award, label: 'Produits 100% neufs & certifiés' },
-      ],
-    },
-    en: {
-      badge: 'Premium Electronics Boutique based in Spain',
-      title1: 'Elite technology designed to',
-      title2: 'elevate your world.',
-      desc: 'Curated collection of flagship smartphones, sleek ultrabooks, and studio audio gear. Shipped directly from Spain across Europe and worldwide.',
-      primaryBtn: 'Explore the Catalog',
-      secondaryBtn: 'New Drops & Deals',
-      trustBadges: [
-        { icon: Truck, label: 'Fast EU & Global delivery' },
-        { icon: ShieldCheck, label: '2-Year official warranty' },
-        { icon: Award, label: '100% Genuine guaranteed' },
-      ],
-    },
-  }
+export default function HeroBanner({ locale = 'fr' }: { locale?: string }) {
+  const [slide, setSlide] = useState(0)
 
-  const c = content[locale as keyof typeof content] || content.es
+  const slides = [
+    {
+      badge: locale === 'fr' ? 'Nouveauté' : locale === 'en' ? 'New In' : 'Novedad',
+      title1: locale === 'fr' ? 'Le son qui vous accompagne' : locale === 'en' ? 'Sound that moves' : 'El sonido que te acompaña',
+      highlight: locale === 'fr' ? 'partout' : locale === 'en' ? 'everywhere' : 'a todas partes',
+      desc: locale === 'fr'
+        ? 'Découvrez notre nouvelle collection audio haut de gamme avec une qualité sonore exceptionnelle et un design moderne.'
+        : locale === 'en'
+        ? 'Experience our brand new premium audio lineup with pristine acoustic clarity and sleek modern craft.'
+        : 'Descubre nuestra nueva colección de audio de alta gama con sonido excepcional y diseño vanguardista.',
+      cta: locale === 'fr' ? 'Découvrir la collection' : locale === 'en' ? 'Explore collection' : 'Descubrir colección',
+      image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=900&auto=format&fit=crop&q=80',
+      tagline: 'Feel the sound',
+      price: '199,00 €',
+    },
+    {
+      badge: locale === 'fr' ? 'Édition Limitée' : locale === 'en' ? 'Limited Edition' : 'Edición Limitada',
+      title1: locale === 'fr' ? 'Puissance & Écran' : locale === 'en' ? 'Pure Power & Ultra' : 'Potencia y Pantalla',
+      highlight: locale === 'fr' ? 'Titanium Next-Gen' : locale === 'en' ? 'Titanium Next-Gen' : 'Titanio Next-Gen',
+      desc: locale === 'fr'
+        ? 'Smartphones et tablettes ultra-performants pour capturer chaque instant avec une netteté spectaculaire.'
+        : locale === 'en'
+        ? 'Flagship smartphones and lightweight tablets engineered for peak performance and all-day power.'
+        : 'Smartphones de alto rendimiento diseñados para capturar cada momento con máxima precisión.',
+      cta: locale === 'fr' ? 'Voir les Smartphones' : locale === 'en' ? 'View Smartphones' : 'Ver Smartphones',
+      image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&auto=format&fit=crop&q=80',
+      tagline: 'Pure Performance',
+      price: '899,00 €',
+    },
+  ]
+
+  const current = slides[slide]
 
   return (
-    <section className="relative overflow-hidden bg-neutral-900 text-white pt-8 pb-16 sm:py-20 lg:py-24">
-      {/* Background ambient lighting */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[var(--color-primary-600)]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-[var(--color-accent-500)]/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-gradient-to-br from-amber-50/70 via-orange-50/40 to-white pt-8 pb-12 sm:pt-12 sm:pb-16 border-b border-orange-100/60">
+      {/* Decorative organic shapes inspired by Nexora */}
+      <div className="absolute top-10 right-1/3 w-80 h-80 rounded-full bg-orange-400/20 blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 right-10 w-96 h-96 rounded-full bg-blue-900/15 blur-2xl pointer-events-none" />
 
       <div className="container-shop relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Headlines & CTAs */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
-            {/* Pill badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-800/80 border border-neutral-700/80 w-fit mb-6 shadow-xs">
-              <Sparkles size={14} className="text-[var(--color-accent-400)]" />
-              <span className="text-xs font-medium text-neutral-300 tracking-wide">
-                {c.badge}
-              </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Text Column */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Orange Tag badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-700 font-semibold text-xs tracking-wide">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+              <span>{current.badge}</span>
             </div>
 
-            {/* Main title */}
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] mb-6">
-              {c.title1}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-200">
-                {c.title2}
+            {/* Main Headline */}
+            <h1 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-black text-neutral-900 tracking-tight leading-[1.12]">
+              {current.title1}{' '}
+              <span className="text-orange-500 block sm:inline">
+                {current.highlight}
               </span>
             </h1>
 
-            {/* Paragraph description */}
-            <p className="text-base sm:text-lg text-neutral-300/90 max-w-xl font-normal leading-relaxed mb-8">
-              {c.desc}
+            {/* Description */}
+            <p className="text-neutral-600 text-sm sm:text-base max-w-lg leading-relaxed font-normal">
+              {current.desc}
             </p>
 
-            {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-10">
+            {/* Call to action button */}
+            <div className="pt-2">
               <Link
                 href={`/${locale}/shop`}
-                className="btn btn-primary btn-lg shadow-lg group flex items-center justify-center gap-2"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm sm:text-base shadow-lg shadow-orange-500/25 transition-all hover:gap-3 cursor-pointer"
               >
-                <span>{c.primaryBtn}</span>
-                <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href={`/${locale}/shop?sort=popular`}
-                className="btn btn-secondary btn-lg bg-neutral-800/90 text-white hover:bg-neutral-700/90 border border-neutral-700 flex items-center justify-center"
-              >
-                {c.secondaryBtn}
+                <span>{current.cta}</span>
+                <ArrowRight size={18} />
               </Link>
             </div>
 
-            {/* Trust bullet badges */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-neutral-800/90">
-              {c.trustBadges.map((badge, idx) => {
-                const Icon = badge.icon
-                return (
-                  <div key={idx} className="flex items-center gap-2.5">
-                    <Icon size={17} className="text-[var(--color-primary-400)] flex-shrink-0" />
-                    <span className="text-xs font-medium text-neutral-300">{badge.label}</span>
-                  </div>
-                )
-              })}
+            {/* Trust Perks row under button */}
+            <div className="pt-6 border-t border-neutral-200/60 flex flex-wrap gap-6 text-xs text-neutral-600">
+              <div className="flex items-center gap-2">
+                <Truck size={17} className="text-orange-500" />
+                <span>{locale === 'fr' ? 'Livraison rapide avec suivi' : locale === 'en' ? 'Fast tracked delivery' : 'Envío rápido con seguimiento'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={17} className="text-orange-500" />
+                <span>{locale === 'fr' ? 'Paiement 100% sécurisé' : locale === 'en' ? '100% secure checkout' : 'Pago 100% seguro'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Headphones size={17} className="text-orange-500" />
+                <span>{locale === 'fr' ? 'Service client réactif' : locale === 'en' ? 'Dedicated customer support' : 'Atención al cliente 24/7'}</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Column: Hero Visual Showcase */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Product Hero Image Card */}
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-neutral-800 bg-neutral-800/50">
+          {/* Right Product Spotlight Image */}
+          <div className="lg:col-span-5 relative flex justify-center">
+            {/* Circular organic backdrop */}
+            <div className="relative w-full max-w-[420px] aspect-square rounded-3xl sm:rounded-[2.5rem] bg-gradient-to-tr from-blue-900 via-slate-800 to-orange-500 p-3 sm:p-4 shadow-2xl shadow-orange-950/15">
+              <div className="relative w-full h-full rounded-2xl sm:rounded-[2rem] overflow-hidden bg-neutral-900">
                 <Image
-                  src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1000&auto=format&fit=crop&q=80"
-                  alt="Élara Shop Flagship Smartphone"
+                  src={current.image}
+                  alt={current.highlight}
                   fill
                   priority
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 40vw"
                 />
 
-                {/* Floating Product Badge */}
-                <div className="absolute bottom-5 left-5 right-5 p-4 rounded-2xl bg-neutral-900/85 backdrop-blur-md border border-neutral-700/60 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-400)] block">
-                        Édition Limitée
-                      </span>
-                      <h3 className="text-sm font-semibold text-white">Smartphone Pro X15 Titanium</h3>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-base font-bold text-white">899,99 €</span>
-                      <span className="text-[11px] text-neutral-400 line-through block">1 099,99 €</span>
-                    </div>
+                {/* Aesthetic script tagline on top right */}
+                <div className="absolute top-4 right-4 text-white/90 font-serif italic text-sm sm:text-base font-semibold drop-shadow-md">
+                  {current.tagline}
+                </div>
+
+                {/* Floating bottom badge with price */}
+                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/60 backdrop-blur-md text-white flex items-center justify-between border border-white/10">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-orange-400 block">Édition spéciale</span>
+                    <span className="text-xs font-semibold">{current.highlight}</span>
                   </div>
+                  <span className="font-mono font-bold text-base text-white">{current.price}</span>
                 </div>
               </div>
+
+              {/* Slider Arrows */}
+              <button
+                type="button"
+                onClick={() => setSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))}
+                className="absolute -left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center text-neutral-700 hover:text-orange-600 transition-colors cursor-pointer"
+                aria-label="Précédent"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))}
+                className="absolute -right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center text-neutral-700 hover:text-orange-600 transition-colors cursor-pointer"
+                aria-label="Suivant"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
           </div>
         </div>

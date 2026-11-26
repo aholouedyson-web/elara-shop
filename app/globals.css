@@ -6,22 +6,22 @@
    DESIGN TOKENS
    ============================================================ */
 :root {
-  /* Primary palette - elegant dark teal */
-  --color-primary-50:  #f0fafa;
-  --color-primary-100: #d0f0f0;
-  --color-primary-200: #a0e0e0;
-  --color-primary-300: #60caca;
-  --color-primary-400: #2aafaf;
-  --color-primary-500: #0d9191;
-  --color-primary-600: #0a7474;
-  --color-primary-700: #085858;
-  --color-primary-800: #053d3d;
-  --color-primary-900: #022323;
+  /* Primary palette - vibrant orange like Nexora */
+  --color-primary-50:  #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
 
-  /* Accent - warm gold */
-  --color-accent-400: #d4a853;
-  --color-accent-500: #c49030;
-  --color-accent-600: #a87820;
+  /* Accent - deep modern navy blue */
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0284c7;
+  --color-accent-600: #0369a1;
 
   /* Neutrals */
   --color-neutral-50:  #fafafa;

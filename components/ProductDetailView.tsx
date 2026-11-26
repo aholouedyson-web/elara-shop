@@ -462,6 +462,35 @@ export default function ProductDetailView({
           </div>
         )}
       </div>
+
+      {/* Barre d'action mobile flottante (Ajout au panier sticky) */}
+      <div className="lg:hidden fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] flex items-center justify-between gap-3">
+        <div className="flex flex-col">
+          <span className="text-[11px] text-neutral-500 line-clamp-1">{product.name}</span>
+          <span className="font-extrabold text-base text-[var(--color-primary-800)] font-mono">
+            {formatPrice(currentPrice, 'EUR', localeFormat)}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          className={`py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all ${
+            added ? 'bg-emerald-600 text-white' : 'btn-primary'
+          }`}
+        >
+          {added ? (
+            <>
+              <Check size={16} />
+              <span>{c.addedToCart}</span>
+            </>
+          ) : (
+            <>
+              <ShoppingCart size={16} />
+              <span>{c.addToCart}</span>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

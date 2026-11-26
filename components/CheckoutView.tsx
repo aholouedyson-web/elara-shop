@@ -120,40 +120,34 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
     }
   }
 
-  // Redirect to Gmail with pre-filled order details & payment proof
-  const openGmailConfirmation = (orderData: any) => {
-    const recipient = 'elara.boutique.es@gmail.com'
-    const subject = encodeURIComponent(`Confirmation Commande #${orderData.orderNumber} - ${orderData.customerName}`)
-    const bodyContent = `Bonjour,\n\nJe confirme le règlement de ma commande effectuée sur Élara Shop.\n\n` +
-      `--------------------------------------\n` +
-      `DÉTAILS DE LA COMMANDE :\n` +
-      `Numéro de commande : ${orderData.orderNumber}\n` +
-      `Date : ${orderData.date}\n` +
-      `Client : ${orderData.customerName}\n` +
-      `Email : ${orderData.email}\n` +
-      `Adresse de livraison : ${orderData.address}\n` +
-      `Montant total : ${orderData.total} €\n` +
-      `Mode de paiement : ${orderData.paymentMethod}\n` +
-      (orderData.paymentProofUrl ? `Preuve de paiement (Lien sécurisé) : ${orderData.paymentProofUrl}\n` : '') +
-      `--------------------------------------\n\n` +
-      `Articles commandés :\n` +
-      orderData.items.map((i: any) => `- ${i.name} x${i.quantity} (${i.price} €)`).join('\n') +
-      `\n\nMerci de bien vouloir valider la préparation et l'expédition de mon colis.\n\nCordialement,\n${orderData.customerName}`
+  // Redirect to WhatsApp (+2290167578855) with pre-filled order details
+  const openWhatsAppConfirmation = (orderData: any) => {
+    const phoneNumber = '2290167578855'
+    const itemsList = orderData.items
+      .map((i: any) => `• *${i.name}* (x${i.quantity}) - ${i.price} €`)
+      .join('\n')
 
-    const encodedBody = encodeURIComponent(bodyContent)
-    
-    // Web Gmail direct link (desktop & mobile browser)
-    const webGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${encodedBody}`
-    
-    // Mailto fallback
-    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${encodedBody}`
+    const message = `🛍️ *NOUVELLE COMMANDE SUR ÉLARASHOP*\n\n` +
+      `📦 *N° Commande :* #${orderData.orderNumber}\n` +
+      `📅 *Date :* ${orderData.date}\n\n` +
+      `👤 *CLIENT :*\n` +
+      `• Nom : ${orderData.customerName}\n` +
+      `• Email : ${orderData.email}\n` +
+      `• Téléphone : ${orderData.phone || phone || 'Non renseigné'}\n` +
+      `• Adresse : ${orderData.address}\n\n` +
+      `🛒 *ARTICLES COMMANDÉS :*\n` +
+      `${itemsList}\n\n` +
+      `💰 *Sous-total :* ${orderData.subtotal} €\n` +
+      `🚚 *Frais de livraison :* ${orderData.shippingFee === 0 ? 'Gratuit' : `${orderData.shippingFee} €`}\n` +
+      `💳 *MONTANT TOTAL :* *${orderData.total} €*\n` +
+      `💵 *Mode de paiement :* ${orderData.paymentMethod}\n` +
+      (orderData.paymentProofUrl ? `\n📎 *Preuve de paiement :*\n${orderData.paymentProofUrl}\n` : '') +
+      `\nMerci de valider et préparer ma commande.`
 
-    // Open Gmail directly in a new tab
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`
+
     if (typeof window !== 'undefined') {
-      const opened = window.open(webGmailUrl, '_blank')
-      if (!opened) {
-        window.location.href = mailtoUrl
-      }
+      window.open(whatsappUrl, '_blank')
     }
   }
 
@@ -173,6 +167,7 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
       orderNumber: newOrderNumber,
       date: new Date().toLocaleDateString(localeFormat),
       email,
+      phone,
       customerName: `${firstName} ${lastName}`,
       address: `${address}, ${postalCode} ${city}, ${country}`,
       country,
@@ -209,10 +204,10 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
     setIsProcessing(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    // 3. Automatically redirect user to Gmail
+    // 3. Automatically redirect user to WhatsApp (+2290167578855)
     setTimeout(() => {
-      openGmailConfirmation(orderData)
-    }, 1200)
+      openWhatsAppConfirmation(orderData)
+    }, 800)
   }
 
   const t = {
@@ -362,25 +357,25 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
           )}
         </div>
 
-        {/* Gmail Redirection Prompt */}
-        <div className="p-5 rounded-2xl bg-red-50 border border-red-200 text-left mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* WhatsApp Redirection Card */}
+        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center flex-shrink-0 font-bold">
-              <Send size={18} />
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 font-bold shadow-xs">
+              <MessageCircle size={20} />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-red-900">Confirmation automatique par Gmail</h4>
-              <p className="text-xs text-red-700">Votre client Gmail s'ouvre avec le message pré-rempli à destination de notre service client.</p>
+              <h4 className="text-sm font-bold text-emerald-950">Transmission WhatsApp automatique</h4>
+              <p className="text-xs text-emerald-700">Votre application WhatsApp s'ouvre avec les données pré-remplies pour validation par notre équipe (+229 01 67 57 88 55).</p>
             </div>
           </div>
 
           <button
             type="button"
-            onClick={() => openGmailConfirmation(orderComplete)}
-            className="btn bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 whitespace-nowrap cursor-pointer shadow-sm"
+            onClick={() => openWhatsAppConfirmation(orderComplete)}
+            className="btn bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 whitespace-nowrap cursor-pointer shadow-sm active:scale-95 transition-all"
           >
-            <Send size={14} />
-            <span>Ouvrir Gmail maintenant</span>
+            <MessageCircle size={15} />
+            <span>Ouvrir WhatsApp</span>
           </button>
         </div>
 

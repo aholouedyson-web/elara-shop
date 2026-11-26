@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { ArrowRight, Sparkles, TrendingUp, ShieldCheck, HeartHandshake, Award } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, ChevronLeft, ChevronRight, ShieldCheck, Truck, Headphones, Award } from 'lucide-react'
 import HeroBanner from '@/components/HeroBanner'
 import CategoryGrid from '@/components/CategoryGrid'
-import PromoBanner from '@/components/PromoBanner'
 import ProductCard from '@/components/ProductCard'
 import { fetchLiveProducts } from '@/lib/products-live'
 
@@ -15,100 +15,54 @@ export default async function HomePage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-
   const allProducts = await fetchLiveProducts()
-  const featured = allProducts.filter((p) => p.isFeatured)
-  const newArrivals = allProducts.filter((p) => p.isNew)
-  const promotions = allProducts.filter((p) => p.compareAtPrice && p.compareAtPrice > p.basePrice)
-
-  const t = {
-    es: {
-      featuredTitle: 'Productos Populares y Destacados',
-      featuredSubtitle: 'Lo más vendido y mejor valorado por nuestros clientes internacionales.',
-      viewAll: 'Ver catálogo completo',
-      newTitle: 'Novedades de Temporada',
-      newSubtitle: 'Los lanzamientos más recientes del mundo de la tecnología.',
-      promoTitle: 'Ofertas y Promociones Exclusivas',
-      promoSubtitle: 'Aprovecha descuentos inmediatos en dispositivos seleccionados.',
-      storyBadge: 'Sobre Élara Shop',
-      storyTitle: 'Pasión por la tecnología, arraigada en España y abierta al mundo',
-      storyP1: 'Fundada con la convicción de que el diseño minimalista y el alto rendimiento deben ir de la mano, Élara Shop selecciona cuidadosamente dispositivos electrónicos que marcan la diferencia.',
-      storyP2: 'Desde nuestro centro logístico en España, preparamos cada paquete con el máximo rigor para garantizar una experiencia de unboxing impecable en cualquier rincón de Europa y el mundo.',
-      storyPill1: 'Control de calidad 100%',
-      storyPill2: 'Envíos asegurados',
-      storyPill3: 'Atención personalizada',
-    },
-    fr: {
-      featuredTitle: 'Produits Vedettes & Populaires',
-      featuredSubtitle: 'Les meilleures ventes et les appareils les plus plébiscités par nos clients.',
-      viewAll: 'Voir tout le catalogue',
-      newTitle: 'Dernières Nouveautés',
-      newSubtitle: 'Les innovations récentes tout juste arrivées dans notre boutique.',
-      promoTitle: 'Offres & Promotions d\'Exception',
-      promoSubtitle: 'Profitez de remises exclusives sur une sélection de produits phares.',
-      storyBadge: 'À Propos d\'Élara Shop',
-      storyTitle: 'La passion de la haute technologie, basée en Espagne et ouverte sur le monde',
-      storyP1: 'Née de l\'exigence d\'offrir un service irréprochable et des produits électroniques d\'élite, Élara Shop allie design raffiné, performances brutes et satisfaction client sans compromis.',
-      storyP2: 'Depuis notre plateforme logistique en Espagne, chaque commande est inspectée, protégée et expédiée avec un numéro de suivi en temps réel vers la France, l\'Union Européenne et l\'international.',
-      storyPill1: 'Contrôle qualité certifié',
-      storyPill2: 'Colis ultra-sécurisés',
-      storyPill3: 'Support client réactif',
-    },
-    en: {
-      featuredTitle: 'Featured & Trending Gear',
-      featuredSubtitle: 'Best-sellers and top-rated devices loved by our worldwide customers.',
-      viewAll: 'Browse all products',
-      newTitle: 'Fresh New Arrivals',
-      newSubtitle: 'The newest flagship releases and accessories in our collection.',
-      promoTitle: 'Special Deals & Promotions',
-      promoSubtitle: 'Instant price drops on high-demand premium tech.',
-      storyBadge: 'About Élara Shop',
-      storyTitle: 'Precision technology, headquartered in Spain with a global soul',
-      storyP1: 'Élara Shop was founded with an obsession for sleek aesthetics, durable engineering, and attentive customer service.',
-      storyP2: 'From our fulfillment center in Spain, every single package is handled with care to ensure a pristine unboxing experience anywhere across Europe and worldwide.',
-      storyPill1: '100% Quality checked',
-      storyPill2: 'Insured tracked parcels',
-      storyPill3: 'Dedicated support',
-    },
-  }
-
-  const c = t[locale as keyof typeof t] || t.es
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* 1. Hero Promotional Banner */}
+    <div className="flex flex-col min-h-screen bg-white">
+      {/* 1. Hero Banner style Nexora */}
       <HeroBanner locale={locale} />
 
-      {/* 2. Collections & Categories Grid */}
+      {/* 2. Explorez nos univers */}
       <CategoryGrid locale={locale} />
 
-      {/* 3. Featured & Popular Products */}
-      <section className="py-16 sm:py-20 bg-white">
+      {/* 3. Les meilleures ventes */}
+      <section className="py-12 sm:py-16 bg-white">
         <div className="container-shop">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-primary-700)] uppercase tracking-wider mb-2">
-                <TrendingUp size={14} />
-                <span>Bestsellers</span>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-5 h-0.5 bg-orange-500 rounded-full" />
+                <span className="text-[11px] font-bold text-orange-500 uppercase tracking-widest">
+                  {locale === 'fr' ? 'Produits phares' : locale === 'en' ? 'Featured Items' : 'Productos destacados'}
+                </span>
               </div>
-              <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight">
-                {c.featuredTitle}
+              <h2 className="text-xl sm:text-3xl font-black text-neutral-900 tracking-tight">
+                {locale === 'fr' ? 'Les meilleures ventes' : locale === 'en' ? 'Best Sellers' : 'Los más vendidos'}
               </h2>
-              <p className="text-sm sm:text-base text-neutral-500 max-w-xl mt-2">
-                {c.featuredSubtitle}
-              </p>
             </div>
-            <Link
-              href={`/${locale}/shop?sort=popular`}
-              className="btn btn-secondary btn-md self-start md:self-auto flex items-center gap-2"
-            >
-              <span>{c.viewAll}</span>
-              <ArrowRight size={16} />
-            </Link>
+
+            {/* Slider arrows decoration */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-orange-500 hover:border-orange-500 transition-colors"
+                aria-label="Précédent"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-orange-500 hover:border-orange-500 transition-colors"
+                aria-label="Suivant"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {featured.slice(0, 4).map((product) => (
+          {/* Grille de 4 colonnes comme l'image 2 */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {allProducts.slice(0, 8).map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
@@ -131,123 +85,82 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* 4. Interactive Promo Banner */}
-      <PromoBanner locale={locale} />
-
-      {/* 5. New Arrivals */}
-      <section className="py-16 sm:py-20 bg-neutral-50/70 border-y border-neutral-100">
+      {/* 4. Bannière promotionnelle Nexora "Jusqu'à -30%" */}
+      <section className="py-6 sm:py-10 bg-white">
         <div className="container-shop">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-accent-600)] uppercase tracking-wider mb-2">
-                <Sparkles size={14} />
-                <span>New Drops</span>
-              </div>
-              <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight">
-                {c.newTitle}
-              </h2>
-              <p className="text-sm sm:text-base text-neutral-500 max-w-xl mt-2">
-                {c.newSubtitle}
-              </p>
-            </div>
-            <Link
-              href={`/${locale}/shop?sort=newest`}
-              className="text-sm font-semibold text-[var(--color-primary-700)] hover:underline flex items-center gap-1"
-            >
-              <span>{c.viewAll}</span>
-              <ArrowRight size={15} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {newArrivals.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                slug={product.slug}
-                name={product.name}
-                brand={product.brand}
-                price={product.basePrice}
-                compareAtPrice={product.compareAtPrice}
-                image={product.images[0]}
-                rating={product.rating}
-                reviewCount={product.reviewCount}
-                isNew={product.isNew}
-                isFeatured={product.isFeatured}
-                badge={product.badge}
-                stock={product.stock}
-                locale={locale}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Brand Story & Trust Section */}
-      <section className="py-20 bg-white">
-        <div className="container-shop">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-primary-700)] bg-[var(--color-primary-50)] px-3 py-1.5 rounded-full inline-block">
-                {c.storyBadge}
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-950 via-blue-900 to-orange-500 p-6 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="max-w-md z-10 space-y-3 sm:space-y-4 text-center md:text-left">
+              <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-orange-200 text-xs font-semibold backdrop-blur-xs">
+                {locale === 'fr' ? 'Offre spéciale' : locale === 'en' ? 'Special Deal' : 'Oferta especial'}
               </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight">
-                {c.storyTitle}
-              </h2>
-              <p className="text-neutral-600 text-base leading-relaxed">
-                {c.storyP1}
+              <h3 className="text-3xl sm:text-5xl font-black leading-tight">
+                Jusqu'à <span className="text-orange-400">-30%</span>
+                <span className="block text-xl sm:text-2xl font-bold font-sans text-neutral-100 mt-1">
+                  sur une sélection de produits
+                </span>
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-300">
+                Équipez-vous avec les meilleures marques et profitez de nos offres limitées !
               </p>
-              <p className="text-neutral-600 text-base leading-relaxed">
-                {c.storyP2}
-              </p>
-
-              <div className="pt-2 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-neutral-100 text-neutral-800 text-xs font-semibold">
-                  <ShieldCheck size={16} className="text-emerald-600" />
-                  <span>{c.storyPill1}</span>
-                </div>
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-neutral-100 text-neutral-800 text-xs font-semibold">
-                  <Award size={16} className="text-amber-600" />
-                  <span>{c.storyPill2}</span>
-                </div>
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-neutral-100 text-neutral-800 text-xs font-semibold">
-                  <HeartHandshake size={16} className="text-[var(--color-primary-600)]" />
-                  <span>{c.storyPill3}</span>
-                </div>
+              <div className="pt-2">
+                <Link
+                  href={`/${locale}/shop`}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs sm:text-sm shadow-md transition-transform hover:scale-105"
+                >
+                  <span>{locale === 'fr' ? "Voir l'offre" : locale === 'en' ? 'View Offer' : 'Ver oferta'}</span>
+                  <ArrowRight size={15} />
+                </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-2 gap-4">
-              <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-100 space-y-2">
-                <span className="font-display text-3xl sm:text-4xl font-bold text-[var(--color-primary-700)] block">
-                  100%
-                </span>
-                <span className="text-sm font-semibold text-neutral-900 block">Authenticité Garantie</span>
-                <p className="text-xs text-neutral-500">Tous nos appareils sont neufs dans leur emballage d'origine scellé.</p>
+            {/* Visual illustration image right */}
+            <div className="relative w-full max-w-sm h-48 sm:h-64 flex items-center justify-center">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=700&auto=format&fit=crop&q=80"
+                  alt="Tech & Style"
+                  fill
+                  className="object-cover rounded-2xl"
+                />
               </div>
-
-              <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-100 space-y-2">
-                <span className="font-display text-3xl sm:text-4xl font-bold text-[var(--color-primary-700)] block">
-                  35+
-                </span>
-                <span className="text-sm font-semibold text-neutral-900 block">Pays Desservis</span>
-                <p className="text-xs text-neutral-500">Expéditions prioritaires assurées vers toute l'Europe et l'international.</p>
+              <div className="absolute top-2 right-2 text-white/90 font-serif italic text-base font-bold drop-shadow">
+                Tech & Style
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-100 space-y-2">
-                <span className="font-display text-3xl sm:text-4xl font-bold text-[var(--color-primary-700)] block">
-                  2 Ans
-                </span>
-                <span className="text-sm font-semibold text-neutral-900 block">Garantie Européenne</span>
-                <p className="text-xs text-neutral-500">Prise en charge et SAV direct avec nos techniciens agréés.</p>
+      {/* 5. Réassurance icones Nexora en bas */}
+      <section className="py-10 bg-white border-t border-neutral-100">
+        <div className="container-shop">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-50/50">
+              <Award size={24} className="text-orange-500 flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-xs sm:text-sm text-neutral-900">Produits originaux</h4>
+                <p className="text-[11px] text-neutral-500">Garantie constructeur</p>
               </div>
-
-              <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-100 space-y-2">
-                <span className="font-display text-3xl sm:text-4xl font-bold text-[var(--color-primary-700)] block">
-                  4.9/5
-                </span>
-                <span className="text-sm font-semibold text-neutral-900 block">Avis Clients Vérifiés</span>
-                <p className="text-xs text-neutral-500">Une satisfaction mesurée et reconnue auprès de notre communauté.</p>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-50/50">
+              <Truck size={24} className="text-orange-500 flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-xs sm:text-sm text-neutral-900">Livraison rapide</h4>
+                <p className="text-[11px] text-neutral-500">Suivi en direct</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-50/50">
+              <ShieldCheck size={24} className="text-orange-500 flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-xs sm:text-sm text-neutral-900">Paiement sécurisé</h4>
+                <p className="text-[11px] text-neutral-500">100% fiable</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-50/50">
+              <Headphones size={24} className="text-orange-500 flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-xs sm:text-sm text-neutral-900">Support client</h4>
+                <p className="text-[11px] text-neutral-500">Toujours à votre écoute</p>
               </div>
             </div>
           </div>

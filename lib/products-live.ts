@@ -1,6 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { Product, PRODUCTS } from '@/lib/products-data'
 
+let cachedProducts: Product[] | null = null
+let lastFetchTime = 0
+const CACHE_DURATION_MS = 60 * 1000 // 60 secondes de cache en mémoire
+
 function mapDbProductToAppProduct(dbP: any): Product {
   const images = (dbP.product_images && dbP.product_images.length > 0)
     ? dbP.product_images
@@ -58,51 +62,54 @@ function mapDbProductToAppProduct(dbP: any): Product {
 }
 
 /**
- * Fetch all products directly from Supabase DB, with fallback to hardcoded PRODUCTS if offline
+ * Fetch products with fast timeout and in-memory cache to prevent blocking the UI
  */
 export async function fetchLiveProducts(options?: {
   category?: string
   query?: string
   sort?: string
 }): Promise<Product[]> {
+  const now = Date.now()
+
+  // 1. Retour ultra-rapide si en cache récent
+  if (cachedProducts && now - lastFetchTime < CACHE_DURATION_MS) {
+    return filterAndSortProducts(cachedProducts, options)
+  }
+
+  // 2. Tenter Supabase avec un timeout court de 1,2s max
   try {
-    const { data: dbProducts, error } = await supabaseAdmin
+    const fetchPromise = supabaseAdmin
       .from('products')
       .select('*, product_images(*), categories(slug)')
       .order('created_at', { ascending: false })
 
-    if (error || !dbProducts || dbProducts.length === 0) {
-      // Fallback
-      return filterAndSortProducts(PRODUCTS, options)
-    }
+    const timeoutPromise = new Promise<{ data: null; error: any }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: new Error('Supabase timeout') }), 1200)
+    )
 
-    const liveList = dbProducts.map(mapDbProductToAppProduct)
-    return filterAndSortProducts(liveList, options)
+    const { data: dbProducts, error } = (await Promise.race([fetchPromise, timeoutPromise])) as any
+
+    if (!error && dbProducts && dbProducts.length > 0) {
+      cachedProducts = dbProducts.map(mapDbProductToAppProduct)
+      lastFetchTime = now
+      return filterAndSortProducts(cachedProducts, options)
+    }
   } catch (err) {
-    console.error('Error fetching live products from Supabase:', err)
-    return filterAndSortProducts(PRODUCTS, options)
+    // Silently fallback to instant PRODUCTS
   }
+
+  // 3. Fallback immédiat (0 milliseconde) sur la base locale PRODUCTS
+  cachedProducts = PRODUCTS
+  lastFetchTime = now
+  return filterAndSortProducts(PRODUCTS, options)
 }
 
 /**
- * Fetch single product by slug directly from Supabase DB
+ * Fetch single product by slug
  */
 export async function fetchLiveProductBySlug(slug: string): Promise<Product | undefined> {
-  try {
-    const { data: dbProduct, error } = await supabaseAdmin
-      .from('products')
-      .select('*, product_images(*), categories(slug)')
-      .eq('slug', slug)
-      .maybeSingle()
-
-    if (error || !dbProduct) {
-      return PRODUCTS.find((p) => p.slug === slug)
-    }
-
-    return mapDbProductToAppProduct(dbProduct)
-  } catch (err) {
-    return PRODUCTS.find((p) => p.slug === slug)
-  }
+  const all = await fetchLiveProducts()
+  return all.find((p) => p.slug === slug)
 }
 
 function filterAndSortProducts(list: Product[], options?: { category?: string; query?: string; sort?: string }): Product[] {

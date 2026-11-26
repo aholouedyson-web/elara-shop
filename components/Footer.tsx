@@ -23,12 +23,12 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
       shop: 'Catálogo',
       help: 'Atención al Cliente',
       legal: 'Información Legal',
-      newsletter: 'Newsletter Élara',
+      newsletter: 'Newsletter ÉlaraShop',
       newsletterText: 'Suscríbete y recibe ofertas exclusivas, novedades y 10% de descuento en tu primer pedido con el código BIENVENUE10.',
       placeholder: 'tu@email.com',
       subscribe: 'Suscribirme',
       subscribedMsg: '¡Gracias por suscribirte!',
-      copyright: `© ${year} Élara Shop S.L. Todos los derechos reservados.`,
+      copyright: `© ${year} ÉlaraShop. Todos los derechos reservados.`,
       spainBadge: 'Empresa registrada en España (UE) · Envíos internacionales con seguimiento',
       links: {
         shop: 'Todos los productos',
@@ -62,7 +62,7 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
       placeholder: 'votre@email.com',
       subscribe: "S'inscrire",
       subscribedMsg: 'Merci pour votre inscription !',
-      copyright: `© ${year} Élara Shop S.L. Tous droits réservés.`,
+      copyright: `© ${year} ÉlaraShop. Tous droits réservés.`,
       spainBadge: 'Boutique basée en Espagne (UE) · Expéditions internationales avec suivi',
       links: {
         shop: 'Tous les produits',
@@ -96,7 +96,7 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
       placeholder: 'your@email.com',
       subscribe: 'Subscribe',
       subscribedMsg: 'Thank you for subscribing!',
-      copyright: `© ${year} Élara Shop S.L. All rights reserved.`,
+      copyright: `© ${year} ÉlaraShop. All rights reserved.`,
       spainBadge: 'Registered business in Spain (EU) · Global tracked shipping',
       links: {
         shop: 'All Products',
@@ -149,16 +149,16 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
       </div>
 
       {/* Main footer directory */}
-      <div className="container-shop py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div className="container-shop py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center justify-between">
           {/* Brand Presentation */}
-          <div className="lg:col-span-2">
+          <div>
             <Link href={`/${locale}`} className="flex items-center gap-2.5 mb-4 group inline-flex">
               <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center flex-shrink-0 shadow-sm">
                 <span className="text-white font-bold text-base font-display">É</span>
               </div>
-              <span className="font-display font-bold text-2xl text-white">
-                Élara<span className="text-[var(--color-primary-400)] font-serif italic ml-1">Shop</span>
+              <span className="font-display font-black text-2xl text-white">
+                Élara<span className="text-orange-500 font-sans italic ml-0.5">Shop</span>
               </span>
             </Link>
 
@@ -168,16 +168,12 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
 
             <div className="space-y-2.5 mb-6 text-sm text-neutral-400">
               <div className="flex items-center gap-2.5">
-                <MapPin size={15} className="text-[var(--color-primary-400)]" />
+                <MapPin size={15} className="text-orange-500" />
                 <span>Madrid & Barcelone, España (UE)</span>
               </div>
               <a href="mailto:contact@elareshop.com" className="flex items-center gap-2.5 hover:text-white transition-colors">
-                <Mail size={15} className="text-[var(--color-primary-400)]" />
+                <Mail size={15} className="text-orange-500" />
                 <span>contact@elareshop.com</span>
-              </a>
-              <a href="tel:+34900000000" className="flex items-center gap-2.5 hover:text-white transition-colors">
-                <Phone size={15} className="text-[var(--color-primary-400)]" />
-                <span>+34 900 123 456 (Lun - Ven, 9h - 18h)</span>
               </a>
             </div>
 
@@ -191,7 +187,7 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="w-9 h-9 rounded-lg bg-neutral-800 hover:bg-[var(--color-primary-600)] text-neutral-300 hover:text-white flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-lg bg-neutral-800 hover:bg-orange-500 text-neutral-300 hover:text-white flex items-center justify-center transition-colors"
                 >
                   <Icon size={16} />
                 </a>
@@ -199,59 +195,12 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
             </div>
           </div>
 
-          {/* Shop Column */}
-          <div>
-            <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-300 mb-4">{c.shop}</h3>
-            <ul className="space-y-2.5">
-              {[
-                { href: '/shop', label: c.links.shop },
-                { href: '/shop?cat=smartphones', label: c.links.smartphones },
-                { href: '/shop?cat=laptops', label: c.links.laptops },
-                { href: '/shop?cat=audio', label: c.links.audio },
-                { href: '/shop?cat=accessoires', label: c.links.accessories },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={`/${locale}${link.href}`}
-                    className="text-sm text-neutral-400 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Customer Support Column */}
-          <div>
-            <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-300 mb-4">{c.help}</h3>
-            <ul className="space-y-2.5">
-              {[
-                { href: '/about', label: c.links.about },
-                { href: '/contact', label: c.links.contact },
-                { href: '/track-order', label: c.links.track },
-                { href: '/faq', label: c.links.faq },
-                { href: '/shipping-policy', label: c.links.shipping },
-                { href: '/returns', label: c.links.returns },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={`/${locale}${link.href}`}
-                    className="text-sm text-neutral-400 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Newsletter Column */}
-          <div>
+          <div className="max-w-md md:ml-auto w-full">
             <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-300 mb-4">{c.newsletter}</h3>
             <p className="text-xs text-neutral-400 mb-4 leading-relaxed">{c.newsletterText}</p>
             {subscribed ? (
-              <div className="p-3 rounded-lg bg-[var(--color-primary-900)]/80 text-[var(--color-primary-300)] text-xs font-medium">
+              <div className="p-3 rounded-lg bg-orange-950/80 text-orange-300 text-xs font-medium">
                 ✅ {c.subscribedMsg}
               </div>
             ) : (
@@ -262,11 +211,11 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={c.placeholder}
-                  className="w-full px-3.5 py-2.5 bg-neutral-800/80 border border-neutral-700 rounded-lg text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[var(--color-primary-400)] transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-neutral-800/80 border border-neutral-700 rounded-lg text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-orange-500 transition-colors"
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-opacity gradient-primary text-white hover:opacity-90 shadow-sm"
+                  className="w-full py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
                 >
                   {c.subscribe}
                 </button>
@@ -299,9 +248,6 @@ export default function Footer({ locale = 'es' }: { locale?: string }) {
             <span>·</span>
             <span>{c.copyright}</span>
           </div>
-        </div>
-        <div className="container-shop pt-3 text-center">
-          <p className="text-[11px] text-neutral-500">{c.spainBadge}</p>
         </div>
       </div>
     </footer>

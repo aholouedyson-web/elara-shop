@@ -272,16 +272,16 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Phone with Country Code */}
+          {/* Phone with Country Code (Optionnel sur mobile pour simplifier) */}
           <div>
             <label className="text-xs font-semibold text-neutral-700 block mb-1">
-              {c.phone} <span className="text-red-500">*</span>
+              {c.phone} <span className="text-neutral-400 font-normal">({locale === 'fr' ? 'optionnel' : locale === 'en' ? 'optional' : 'opcional'})</span>
             </label>
             <div className="flex gap-2">
               <select
                 value={phoneCountryCode}
                 onChange={(e) => setPhoneCountryCode(e.target.value)}
-                className="w-32 py-2.5 px-2 rounded-xl border border-neutral-300 text-xs sm:text-sm bg-neutral-50 focus:border-[var(--color-primary-600)] outline-none cursor-pointer"
+                className="w-28 sm:w-32 py-2.5 px-2 rounded-xl border border-neutral-300 text-xs sm:text-sm bg-neutral-50 focus:border-[var(--color-primary-600)] outline-none cursor-pointer"
               >
                 {PHONE_COUNTRY_CODES.map((item) => (
                   <option key={item.iso} value={item.code}>
@@ -293,7 +293,6 @@ export default function RegisterPage() {
                 <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input
                   type="tel"
-                  required
                   placeholder="612 345 678"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}

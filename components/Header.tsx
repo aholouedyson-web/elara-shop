@@ -15,11 +15,7 @@ const locales = [
 
 const navLinks = [
   { href: '/shop', labelEs: 'Tienda', labelFr: 'Boutique', labelEn: 'Shop' },
-  { href: '/shop?cat=smartphones', labelEs: 'Smartphones', labelFr: 'Smartphones', labelEn: 'Smartphones' },
-  { href: '/shop?cat=laptops', labelEs: 'Laptops', labelFr: 'Laptops', labelEn: 'Laptops' },
-  { href: '/shop?cat=audio', labelEs: 'Audio', labelFr: 'Audio', labelEn: 'Audio' },
   { href: '/track-order', labelEs: 'Seguir pedido', labelFr: 'Suivre commande', labelEn: 'Track order' },
-  { href: '/about', labelEs: 'Sobre nosotros', labelFr: 'À propos', labelEn: 'About' },
 ]
 
 export default function Header({ locale = 'es' }: { locale?: string }) {
@@ -76,42 +72,17 @@ export default function Header({ locale = 'es' }: { locale?: string }) {
             : 'bg-white border-b border-neutral-100'
         )}
       >
-        {/* Top notification bar */}
-        <div className="bg-[var(--color-neutral-900)] text-white text-xs py-2 px-4 text-center font-medium tracking-wide">
-          <div className="container-shop flex items-center justify-between">
-            <span className="hidden sm:inline-block text-neutral-400">
-              🇪🇸 {locale === 'fr' ? 'Expédié depuis l\'Espagne' : locale === 'en' ? 'Shipped from Spain' : 'Envíos desde España'}
-            </span>
-            <span className="mx-auto sm:mx-0">
-              {locale === 'fr' && '✨ Livraison offerte dès 50€ d\'achats en Espagne et tarif réduit en Europe !'}
-              {locale === 'en' && '✨ Free shipping from €50 in Spain & discounted shipping across Europe!'}
-              {locale === 'es' && '✨ Envío gratuito a partir de 50€ en España y tarifa reducida en Europa!'}
-            </span>
-            <div className="hidden sm:flex items-center gap-4 text-neutral-400">
-              <Link href={`/${locale}/track-order`} className="hover:text-white transition-colors flex items-center gap-1">
-                <Package size={13} />
-                <span>{locale === 'fr' ? 'Suivi' : locale === 'en' ? 'Tracking' : 'Seguimiento'}</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {/* Main navigation */}
         <div className="container-shop">
           <div className="flex items-center justify-between h-18">
-            {/* Logo */}
+            {/* Logo ÉlaraShop */}
             <Link href={`/${locale}`} className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center flex-shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105">
-                <span className="text-white font-bold text-base font-display">É</span>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center flex-shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105">
+                <span className="text-white font-black text-lg">É</span>
               </div>
-              <div className="flex flex-col">
-                <span className="font-display font-bold text-xl tracking-tight text-[var(--color-neutral-900)] group-hover:text-[var(--color-primary-600)] transition-colors">
-                  Élara<span className="text-[var(--color-primary-600)] font-serif italic ml-1">Shop</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-widest text-[var(--color-neutral-400)] font-semibold -mt-1">
-                  International Boutique
-                </span>
-              </div>
+              <span className="font-display font-black text-xl tracking-tight text-neutral-900 group-hover:text-orange-600 transition-colors">
+                Élara<span className="text-orange-500 font-sans italic ml-0.5">Shop</span>
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
