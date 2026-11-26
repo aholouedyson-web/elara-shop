@@ -398,8 +398,8 @@ export default function CheckoutView({ locale = 'es' }: { locale: string }) {
     )
   }
 
-  // If empty cart
-  if (items.length === 0) {
+  // If empty cart (uniquement après vérification que le client est monté)
+  if (mounted && items.length === 0) {
     return (
       <div className="container-shop py-20 text-center max-w-md">
         <div className="w-16 h-16 rounded-2xl bg-neutral-100 flex items-center justify-center mx-auto text-neutral-400 mb-4">

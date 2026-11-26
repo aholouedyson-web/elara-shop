@@ -329,11 +329,12 @@ export default function CartDrawer({ locale = 'es' }: { locale?: string }) {
                 </div>
               </div>
 
-              {/* Checkout link */}
+              {/* Checkout link avec prefetch actif pour chargement instantané */}
               <Link
                 href={`/${locale}/checkout`}
+                prefetch={true}
                 onClick={closeCart}
-                className="btn btn-primary btn-lg w-full flex items-center justify-between shadow-md group"
+                className="btn btn-primary btn-lg w-full flex items-center justify-between shadow-md group cursor-pointer"
               >
                 <span>{c.checkout}</span>
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
