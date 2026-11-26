@@ -90,9 +90,10 @@ export async function fetchLiveProducts(options?: {
     const { data: dbProducts, error } = (await Promise.race([fetchPromise, timeoutPromise])) as any
 
     if (!error && dbProducts && dbProducts.length > 0) {
-      cachedProducts = dbProducts.map(mapDbProductToAppProduct)
+      const mapped = dbProducts.map(mapDbProductToAppProduct)
+      cachedProducts = mapped
       lastFetchTime = now
-      return filterAndSortProducts(cachedProducts, options)
+      return filterAndSortProducts(mapped, options)
     }
   } catch (err) {
     // Silently fallback to instant PRODUCTS

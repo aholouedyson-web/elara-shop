@@ -17,6 +17,7 @@ import {
   X,
   Send,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react'
 import { useCartStore } from '@/store/cart'
 import { formatPrice, COUNTRIES, generateOrderNumber } from '@/lib/utils'
